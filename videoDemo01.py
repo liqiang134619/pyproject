@@ -10,7 +10,7 @@ if __name__ == '__main__':
         if not ret:
             print("Can't receive frame (stream end?). Exiting ...")
             break
-        gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+        gray = cv.cvtColor(frame, 1)
         cv.imshow('frame', gray)
         if cv.waitKey(25) == ord('q'):
             break
