@@ -12,7 +12,7 @@ def createDataSet():
     return group,labels
 
 
-
+# https://github.com/Jack-Cherish/Machine-Learning/blob/master/kNN/2.%E6%B5%B7%E4%BC%A6%E7%BA%A6%E4%BC%9A/kNN_test02.py
 # k近邻算法
 # 1. 计算已知类别数据集中的点与当前点之间的距离；
 # 2. 按照距离递增次序排序；
