@@ -8,10 +8,10 @@ datingDataMat, datingLabels = kNN.file2matrix("datingTestSet.txt")
 
 # 创建散点图
 
-kNN.showdatas(datingDataMat,datingLabels)
+# kNN.showdatas(datingDataMat,datingLabels)
 
 # normalmat, ranges, minvalus = kNN.auto_normal(datingDataMat)
 # print(normalmat)
 # print(ranges)
 # print(minvalus)
-# kNN.datingClassTest()
+kNN.datingClassTest()

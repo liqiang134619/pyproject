@@ -4,6 +4,7 @@ from matplotlib.font_manager import FontProperties
 import matplotlib.lines as mlines
 import matplotlib.pyplot as plt
 import operator
+from os import listdir
 
 
 def createDataSet():
@@ -159,8 +160,65 @@ def datingClassTest():
     for i in range(numTestVecs):
         # 前numTestVecs个数据作为测试集,后m-numTestVecs个数据作为训练集
         classifierResult = classify0(normMat[i, :], normMat[numTestVecs:m, :],
-                                     datingLabels[numTestVecs:m], 4)
+                                     datingLabels[numTestVecs:m], 6)
         print("分类结果:%s\t真实类别:%d" % (classifierResult, datingLabels[i]))
         if classifierResult != datingLabels[i]:
             errorCount += 1.0
     print("错误率:%f%%" % (errorCount / float(numTestVecs) * 100))
+
+
+def img2vector(filename):
+    returnvect = zeros((1, 1024))
+    fr = open(filename)
+    for i in range(32):
+        linestr = fr.readline()
+        for j in range(32):
+            # 第0行的第32*i+j个数
+            returnvect[0, 32 * i + j] = int(linestr[j])
+    return returnvect
+
+
+def handWritingClassTest():
+    hwLabels = []
+    # 读取文件
+    trainingFileList = listdir("./trainingDigits")
+
+    # 文件长度
+    m = len(trainingFileList)
+
+    # 创建np  matrix
+    trainingMat = zeros((m, 1024))
+
+    for i in range(m):
+        # ❷ （以下三行）从文件名解析分类数字
+        fileNameStr = trainingFileList[i]
+        fileStr = fileNameStr.split('.')[0]
+        # 数字是什么
+        classNumStr = int(fileStr.split('_')[0])
+
+        # 结果集 数据标签
+        hwLabels.append(classNumStr)
+        # 将每一个文件的1x1024数据存储到trainingMat矩阵中
+        trainingMat[i, :] = img2vector('./trainingDigits/%s' % (fileNameStr))
+
+    #  测试结果集
+    testFileList = listdir("./testDigits")
+
+    # 准确率
+    errorCount = 0.0
+
+    mTest = len(testFileList)
+    # 从文件中解析出测试集的类别并进行分类测试
+    for i in range(mTest):
+        # 获得文件的名字
+        fileNameStr = testFileList[i]
+        # 获得分类的数字
+        classNumber = int(fileNameStr.split('_')[0])
+        # 获得测试集的1x1024向量,用于训练
+        vectorUnderTest = img2vector('./testDigits/%s' % (fileNameStr))
+        # 获得预测结果
+        classifierResult = classify0(vectorUnderTest, trainingMat, hwLabels, 3)
+        print("分类返回结果为%d\t真实结果为%d" % (classifierResult, classNumber))
+        if (classifierResult != classNumber):
+            errorCount += 1.0
+    print("总共错了%d个数据\n错误率为%f%%" % (errorCount, errorCount / mTest))
